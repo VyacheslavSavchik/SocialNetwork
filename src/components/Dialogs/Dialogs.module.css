@@ -1,0 +1,30 @@
+.dialogs {
+    display: flex;
+    flex-direction: row;
+}
+
+.dialogItems {
+    padding: 30px;
+    color: white;
+}
+
+.dialogItems .active {
+    color: gold;
+}
+
+.messages {
+    padding: 30px;
+    margin-right: 300px;
+}
+
+.messages .message {
+    margin-top: 30px;
+    color: white;
+}
+
+.img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
