@@ -1,4 +1,5 @@
 import axios from "axios";
+import {formDataType} from "../login/Login";
 
 const instance = axios.create({
     withCredentials: true,
@@ -7,8 +8,8 @@ const instance = axios.create({
 })
 
 export const usersAPI = {
-    getUsers(currentPage: number, pageSize: number) {
-        return instance.get(`users?page=${currentPage}&count=${pageSize}`)
+    getUsers(page: number, pageSize: number) {
+        return instance.get(`users?page=${page}&count=${pageSize}`)
     },
     followUsers(userId: string) {
         return instance.post(`follow/${userId}`)
@@ -17,20 +18,47 @@ export const usersAPI = {
         return instance.delete(`follow/${userId}`)
     },
     getProfile(userId: string){
-        return instance.get(`profile/` + userId)
+        console.warn('Obsolete method. Please profileAPI object.')
+        return profileAPI.getProfile(userId)
     }
 }
-
+export const profileAPI = {
+    getProfile(userId: string){
+        return instance.get(`profile/` + userId)
+    },
+    getStatus(userId: string){
+        return instance.get(`profile/status/` + userId)
+    },
+    updateStatus(status: string) {
+        return instance.put(`profile/status`, {status})
+    }
+}
 export const authAPI = {
    me() {
      return instance.get(`auth/me`)
-   }
+   },
+    login(params: formDataType) {
+        return instance.post<ResponseType>(`auth/login`, params)
+    },
+    logout() {
+        return instance.delete(`auth/login`)
+    }
 }
 
 
 
+// export type LoginType = {
+//     email: string
+//     password: string
+//     rememberMe: boolean
+// }
 
-
+export type ResponseType<D = {}> = {
+    resultCode: number
+    messages: Array<string>
+    fieldsErrors: Array<string>
+    data: D
+}
 
 
 

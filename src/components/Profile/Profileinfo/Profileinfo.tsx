@@ -2,6 +2,7 @@ import React from 'react';
 import s from './ProfileInfo.module.css'
 import {Preloader} from "../../common/Preloader/Preloader";
 import {ProfileContainerPropsType} from "../ProfileContainer";
+import ProfileStatus from "./ProfileStatus";
 
 const ProfileInfo = (props: ProfileContainerPropsType) => {
     if(!props.profile) {
@@ -13,8 +14,8 @@ const ProfileInfo = (props: ProfileContainerPropsType) => {
                     <img src='https://teleprogramma.pro/sites/default/files/nodes/node_19852_1653762796.jpg'/>
                 </div>
                 <div className={s.descriptionBlock}>
-                    {/*<img src={props.profile.photos.large}/>*/}
-                    avatar + description
+                    <img src={props.profile.photos.large}/>
+                    <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
                 </div>
             </div>
     );

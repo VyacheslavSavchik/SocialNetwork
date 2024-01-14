@@ -1,20 +1,15 @@
 import React from 'react';
 import s from "./Users.module.css";
 import userPhoto from "../../assets/images/image.png";
-import {followSuccess, unfollowSuccess, UsersType} from "../../Redux/users-reducer";
+import {UsersType} from "../../Redux/users-reducer";
 import {NavLink} from "react-router-dom";
-import {usersAPI} from "../../api/api";
 
 type PropsType = {
     totalUsersCount: number
     users: UsersType[]
     pageSize: number
     currentPage: number
-    //followSuccess: (userId: string) => void
-    //unfollowSuccess: (userId: string) => void
-    //setUsers: (users: UsersType[]) => void
     onPageChanged: (pageNumber: number) => void
-    //setTotalCount: (totalCount: number) => void
     toggleFollowingProgress: (isFetching: boolean, userId: string) => void
     followingProgress: Array<string>
     follow: (userId: string) => void
