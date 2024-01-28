@@ -27,3 +27,7 @@ export const getFollowingInProgress = (state: AppStateType) => {
 export const getUserId = (state: AppStateType) => {
     return state.usersPage.userId
 }
+
+export const getPortionSize = (state: AppStateType) => {
+    return state.usersPage.portionSize
+}

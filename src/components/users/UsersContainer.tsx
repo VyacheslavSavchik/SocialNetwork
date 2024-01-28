@@ -16,7 +16,7 @@ import {
     getCurrentPage,
     getFollowingInProgress,
     getIsFetching,
-    getPageSize,
+    getPageSize, getPortionSize,
     getTotalUsersCount,
     getUserId,
     getUsers
@@ -26,11 +26,13 @@ class UsersContainer extends React.Component<UsersPropsType, UsersType> {
 
 
     componentDidMount() {
-        this.props.getUsersTC(this.props.currentPage, this.props.pageSize)
+        const {currentPage, pageSize} = this.props
+        this.props.getUsersTC(currentPage, pageSize)
     }
 
     onPageChanged = (pageNumber: number) => {
-        this.props.getUsersTC(pageNumber, this.props.pageSize)
+        const {pageSize} = this.props
+        this.props.getUsersTC(pageNumber, pageSize)
     }
 
     render() {
@@ -45,6 +47,7 @@ class UsersContainer extends React.Component<UsersPropsType, UsersType> {
                         followingProgress={this.props.followingProgress}
                         follow={this.props.follow}
                         unFollow={this.props.unFollow}
+                        portionSize={this.props.portionSize}
         />
         </>
     }
@@ -58,6 +61,8 @@ type mapStatePropsType = {
     isFetching: boolean
     followingProgress: Array<string>
     userId: string
+    portionSize: number
+
 }
 
 type mapDispatchPropsType = {
@@ -70,18 +75,6 @@ type mapDispatchPropsType = {
 
 export type UsersPropsType = mapStatePropsType & mapDispatchPropsType
 
-// const mapStateToProps = (state: AppStateType): mapStatePropsType => {
-//     return {
-//         users: state.usersPage.users,
-//         pageSize: state.usersPage.pageSize,
-//         totalUsersCount: state.usersPage.totalUsersCount,
-//         currentPage: state.usersPage.currentPage,
-//         isFetching: state.usersPage.isFetching,
-//         followingProgress: state.usersPage.followingInProgress,
-//         userId: state.usersPage.userId
-//     }
-// }
-
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         users: getUsers(state),
@@ -90,7 +83,8 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
         currentPage: getCurrentPage(state),
         isFetching: getIsFetching(state),
         followingProgress: getFollowingInProgress(state),
-        userId: getUserId(state)
+        userId: getUserId(state),
+        portionSize: getPortionSize(state)
     }
 }
 

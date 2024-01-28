@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {AppStateType} from "./redux-store";
 import {stopSubmit} from "redux-form";
 
-const SET_USER_DATA = 'SET-USER-DATA';
+const SET_USER_DATA = '/samurai-network/auth/SET-USER-DATA';
 
 export type initialStateType = {
     userId: string
@@ -47,34 +47,28 @@ export const setAuthUserData = (userId: string | null, email: string | null, log
 
 //_______________thunk
 
-export const getAuthUserDataThunk = () => (dispatch: Dispatch) => {
-    return authAPI.me()
-        .then(res => {
+export const getAuthUserDataThunk = () => async(dispatch: Dispatch) => {
+    const res = await authAPI.me()
             if(res.data.resultCode === 0) {
                 let {id, login, email} = res.data.data
                 dispatch(setAuthUserData(id, email, login, true))
             }
-        })
 }
 
-export const login = (data: formDataType) => (dispatch: ThunkDispatch<AppStateType,unknown,ActionsTypesOfUsers>) => {
-    authAPI.login(data)
-        .then(res => {
+export const login = (data: formDataType) => async(dispatch: ThunkDispatch<AppStateType,unknown,ActionsTypesOfUsers>) => {
+    const res = await authAPI.login(data)
             if(res.data.resultCode === 0) {
                dispatch(getAuthUserDataThunk())
             } else {
                 const message = res.data.messages.length > 0 ? res.data.messages[0] : 'Some error'
                 dispatch(stopSubmit('login', {_error: message}))
             }
-        })
 }
 
-export const logout = () => (dispatch: Dispatch) => {
-    authAPI.logout()
-        .then(res => {
+export const logout = () => async(dispatch: Dispatch) => {
+    const res = await authAPI.logout()
             if(res.data.resultCode === 0) {
               dispatch(setAuthUserData(null, null, null, false))
             }
-        })
 }
 export default authReducer;

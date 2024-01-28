@@ -1,6 +1,7 @@
 import React from "react";
 import s from "./FormsControls.module.css";
 
+
 type PropsType = {
     input: any
     meta: any
@@ -26,5 +27,15 @@ export const Textarea = ({input, meta, ...props}: PropsType) => {
 
 export const Input = ({input, meta, ...props}: PropsType) => {
     return <FormControl input={input} meta={meta}><input {...input} {...props}/></FormControl>
-
 }
+
+// export const createField = (placeholder?: string, name?: string, validators?: Validator | Validator[] | undefined, component?: ComponentType<WrappedFieldProps> | "input" | "select" | "textarea" | undefined, props?: {}, text?: string) => (
+//     <div>
+//     <Field placeholder={placeholder}
+//            validate={validators}
+//            name={name}
+//            component={component}
+//            {...props}
+//     /> {text}
+//     </div>
+// )
