@@ -9,40 +9,44 @@ type PropsType = {
     follow: (userId: string) => void
     unFollow: (userId: string) => void
     user: UsersType
+
 }
 
 export const User = ({user, followingProgress, follow, unFollow, ...props}: PropsType) => {
     return (
         <div>
+
                 <span>
                     <div>
                         <NavLink to={'/profile/' + user.id}>
-                        <img src={user.photos != null ? user.photos : userPhoto} className={s.userPhoto}/>
+                    <img src={user.photos.small !== null ? user.photos.small : userPhoto} className={s.userPhoto}/>
                     </NavLink>
                         </div>
                     <div>
                         {user.followed
                             ? <button disabled={followingProgress.some(id => id === user.id)}
-                                      onClick={() => {follow(user.id)}}
+                                      onClick={() => {
+                                          follow(user.id)
+                                      }}
                             >Follow</button>
 
                             : <button disabled={followingProgress.some(id => id === user.id)}
-                                      onClick={() => {unFollow(user.id)}}
+                                      onClick={() => {
+                                          unFollow(user.id)
+                                      }}
                             >Unfollow</button>}
 
                     </div>
                 </span>
-                <span>
+            <span>
                     <span>
                         <div>{user.name}</div>
+                    </span>
+               <span>
                         <div>{user.status}</div>
-                    </span>
-                    <span>
-                        <div>{'user.location.country'}</div>
-                        <div>{'user.location.city'}</div>
-                    </span>
+               </span>
                 </span>
-    </div>
+        </div>
     )
 };
 

@@ -3,24 +3,25 @@ import profileReducer, {addPostCreator, deletePost, InitialStateType} from "./pr
 const state: InitialStateType = {
     newPostText: 'change me',
     status: '',
+    isOwner: false,
     posts: [
         {id: 1, message: 'Hi, how are you?', likesCount: 15},
         {id: 2, message: 'It\'s my first post', likesCount: 30},
     ],
     profile: {
-        aboutMe: '',
+        aboutMe: null,
         contacts: {
-            facebook: '',
-            website: '',
-            vk: '',
-            twitter: '',
-            instagram: '',
-            youtube: '',
-            github: '',
-            mainLink: ''
+            facebook: null,
+            website: null,
+            vk: null,
+            twitter: null,
+            instagram: null,
+            youtube: null,
+            github: null,
+            mainLink: null
         },
         lookingForAJob: true,
-        lookingForAJobDescription: '',
+        lookingForAJobDescription: null,
         fullName: '',
         userId: '',
         photos: {
@@ -29,6 +30,7 @@ const state: InitialStateType = {
         }
     }
 }
+
 
 it('length of posts should be incremented', () => {
     const action = addPostCreator('YoYo')

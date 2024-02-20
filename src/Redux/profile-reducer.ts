@@ -1,31 +1,37 @@
 import {Dispatch} from "redux";
 import {profileAPI, usersAPI} from "../api/api";
+import {ThunkDispatch} from "redux-thunk";
+import {AppStateType} from "./redux-store";
+import {FormAction, stopSubmit} from "redux-form";
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET-USER-PROFILE';
 const SET_STATUS_PROFILE = 'SET-STATUS-PROFILE';
 const DELETE_POST = 'DELETE-POST';
+const SAVE_PHOTO_SUCCESS = 'SAVE-PHOTO-SUCCESS';
 
 export type ProfileType = {
-    aboutMe: string,
-    contacts: {
-        facebook: string,
-        website: string,
-        vk: string,
-        twitter: string,
-        instagram: string,
-        youtube: string,
-        github: string,
-        mainLink: string
-    },
+    aboutMe: string | null,
+    contacts: ContactsType,
     lookingForAJob: boolean,
-    lookingForAJobDescription: string,
-    fullName: string,
-    userId: string,
+    lookingForAJobDescription: string | null,
+    fullName: string | null,
+    userId: string | null,
     photos: {
-        small: string,
-        large: string
+        small: string | null,
+        large: string | null
     }
+}
+
+export type ContactsType =  {
+    facebook: string | null ,
+    website: string | null ,
+    vk: string | null ,
+    twitter: string | null ,
+    instagram: string | null ,
+    youtube: string | null ,
+    github: string | null ,
+    mainLink: string | null
 }
 
 export type PostsType = {
@@ -39,28 +45,30 @@ export type InitialStateType = {
     newPostText: string
     profile: ProfileType
     status: string
+    isOwner: boolean
 }
 
 const initialState = {
     newPostText: 'change me',
     status: '',
+    isOwner: false,
     posts: [
         {id: 1, message: 'Hi, how are you?', likesCount: 15},
         {id: 2, message: 'It\'s my first post', likesCount: 30},
     ],
     profile: {
-        aboutMe: '',
+        aboutMe:'',
         contacts: {
-            facebook: '',
-            website: '',
-            vk: '',
-            twitter: '',
-            instagram: '',
-            youtube: '',
-            github: '',
-            mainLink: ''
+            facebook:'',
+            website:'',
+            vk:'',
+            twitter:'',
+            instagram:'',
+            youtube:'',
+            github:'',
+            mainLink:''
         },
-        lookingForAJob: true,
+        lookingForAJob: false,
         lookingForAJobDescription: '',
         fullName: '',
         userId: '',
@@ -100,6 +108,10 @@ const profileReducer = (state: InitialStateType = initialState, action: ActionsT
                 ...state,
                 posts: state.posts.filter(p => p.id != action.postId)
             }
+        case SAVE_PHOTO_SUCCESS:
+            return {
+                ...state, profile: {...state.profile, photos: action.photos}
+            }
         default:
             return state;
     }
@@ -110,6 +122,7 @@ export type ActionsTypesOfProfile =
     | ReturnType<typeof setUserProfile>
     | ReturnType<typeof setStatusProfile>
     | ReturnType<typeof deletePost>
+    | ReturnType<typeof savePhotoSuccess>
 
 export const addPostCreator = (newPostText: string) => ({
     type: ADD_POST,
@@ -130,7 +143,12 @@ export const deletePost = (postId: number) => ({
     type: DELETE_POST,
     postId
 } as const)
-//_______________thunk
+
+export const savePhotoSuccess = (photos: {small: string, large: string}) => ({
+    type: SAVE_PHOTO_SUCCESS,
+    photos
+} as const)
+
 export const getUserProfileThunk = (userId: string) => async(dispatch: Dispatch) => {
    const res = await usersAPI.getProfile(userId)
             dispatch(setUserProfile(res.data))
@@ -148,4 +166,21 @@ export const updateStatus = (status: string) => async(dispatch: Dispatch) => {
             }
 }
 
+export const savePhoto = (file: string) => async(dispatch: Dispatch) => {
+    const res = await profileAPI.savePhoto(file)
+    if(res.data.resultCode === 0) {
+        dispatch(savePhotoSuccess(res.data.data.photos))
+    }
+}
+
+export const saveProfile = (profile: ProfileType) => async(dispatch: ThunkDispatch<AppStateType,unknown, FormAction>, getState: any) => {
+    const userId = getState().auth.userId
+    const res = await profileAPI.saveProfile(profile)
+    if(res.data.resultCode === 0) {
+        dispatch(getUserProfileThunk(userId))
+    } else {
+        dispatch(stopSubmit('edit-profile', {_error: res.data.messages[0]}))
+        return Promise.reject(res.data.messages[0])
+    }
+}
 export default profileReducer;

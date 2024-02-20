@@ -16,7 +16,8 @@ import {
     getCurrentPage,
     getFollowingInProgress,
     getIsFetching,
-    getPageSize, getPortionSize,
+    getPageSize,
+    getPortionSize,
     getTotalUsersCount,
     getUserId,
     getUsers
@@ -84,7 +85,7 @@ const mapStateToProps = (state: AppStateType): mapStatePropsType => {
         isFetching: getIsFetching(state),
         followingProgress: getFollowingInProgress(state),
         userId: getUserId(state),
-        portionSize: getPortionSize(state)
+        portionSize: getPortionSize(state),
     }
 }
 

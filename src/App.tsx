@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
-import {BrowserRouter, Route, withRouter} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import UsersContainer from "./components/users/UsersContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import Login from "./login/Login";
@@ -27,9 +27,11 @@ type MapDispatchPropsType = {
 }
 
 class App extends React.Component<AppPropsType> {
+
     componentDidMount() {
         this.props.initializeApp()
     }
+
 
     render() {
         if (!this.props.initialized) {
@@ -40,11 +42,26 @@ class App extends React.Component<AppPropsType> {
                 <HeaderContainer/>
                 <Navbar/>
                 <div className='app-wrapper-content'>
-                    <Route path='/dialogs' render={withSuspense(DialogsContainer)}/>
-                    <Route path='/profile/:userId?'
-                           render={withSuspense(ProfileContainer)}/>
-                    <Route path='/users' render={() => <UsersContainer/>}/>
-                    <Route path='/login' render={() => <Login/>}/>
+                    <Switch>
+                        <Route exact path='/'
+                               render={() => <Redirect to={'/profile'}/>}/>
+
+                        <Route path='/dialogs'
+                               render={withSuspense(DialogsContainer)}/>
+
+                        <Route path='/profile/:userId?'
+                               render={withSuspense(ProfileContainer)}/>
+
+                        <Route path='/users'
+                               render={() => <UsersContainer/>}/>
+
+                        <Route path='/login'
+                               render={() => <Login/>}/>
+
+                        <Route path='*'
+                               render={() => <div>❌404 Page Not Found❌</div>}/>
+
+                    </Switch>
                 </div>
             </div>
 
@@ -63,7 +80,7 @@ const AppContainer = compose<React.ComponentType>(
 const SamuraiTSApp = () => {
     return <BrowserRouter>
         <Provider store={store}>
-            <AppContainer />
+            <AppContainer/>
         </Provider>
     </BrowserRouter>
 }

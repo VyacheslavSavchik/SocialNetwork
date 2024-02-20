@@ -16,10 +16,9 @@ export type UsersType = {
     name: string
     status: string
     followed: boolean
-    photos: string
-    location: {
-        city: string
-        country: string
+    photos: {
+        small: string
+        large: string
     }
 }
 
@@ -32,6 +31,10 @@ export type initialStateType = {
     followingInProgress: Array<string>
     userId: string
     portionSize: number
+    photos: {
+        small: string
+        large: string
+    }
 }
 
 let initialState = {
@@ -42,7 +45,11 @@ let initialState = {
     isFetching: false,
     followingInProgress: [],
     userId: '',
-    portionSize: 10
+    portionSize: 10,
+    photos: {
+        small: '',
+        large: ''
+    }
 }
 
 const usersReducer = (state: initialStateType = initialState, action: ActionsTypesOfUsers): initialStateType => {
@@ -131,8 +138,6 @@ export const toggleFollowingProgress = (isFetching: boolean, userId: string) => 
     userId
 } as const)
 
-//_____________thunk
-
 export const getUsersTC = (page: number, pageSize: number) => async (dispatch: Dispatch) => {
     dispatch(toggleIsFetching(true))
     dispatch(setCurrentPage(page))
@@ -144,8 +149,6 @@ export const getUsersTC = (page: number, pageSize: number) => async (dispatch: D
 
 export const follow = (userId: string) => async (dispatch: Dispatch) => {
     const apiMethod = usersAPI.followUsers(userId)
-    const actionCreator = followSuccess(userId)
-
     dispatch(toggleFollowingProgress(true, userId))
     const res = await apiMethod
     if (res.data.resultCode === 1) {
@@ -155,7 +158,6 @@ export const follow = (userId: string) => async (dispatch: Dispatch) => {
 }
 
 export const unFollow = (userId: string) => async (dispatch: Dispatch) => {
-
     dispatch(toggleFollowingProgress(true, userId))
     const res = await usersAPI.unFollowUsers(userId)
     if (res.data.resultCode === 1) {

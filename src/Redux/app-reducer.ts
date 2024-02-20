@@ -31,7 +31,6 @@ export const initializedSuccess = () => ({
     type:  SET_INITIALIZED
 } as const)
 
-//_______________thunk
 
 export const initializeApp = () => (dispatch: ThunkDispatch<AppStateType,unknown,AppActionTypes>) => {
     const promise = dispatch(getAuthUserDataThunk())

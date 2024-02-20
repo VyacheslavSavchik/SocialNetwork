@@ -15,10 +15,10 @@ export type MessagesType = {
 const initialState = {
     dialogs: [
         {id: 1, name: 'John'},
-        {id: 2, name: 'Bim'},
-        {id: 3, name: 'Lola'},
+        {id: 2, name: 'Ed'},
+        {id: 3, name: 'Molly'},
         {id: 4, name: 'Bob'},
-        {id: 5, name: 'Reks'}
+        {id: 5, name: 'Alex'}
     ] as Array<DialogsType>,
     messages: [
         {id: 1, message: 'Hi'},
