@@ -58,8 +58,8 @@ class App extends React.Component<AppPropsType> {
                         <Route path='/login'
                                render={() => <Login/>}/>
 
-                        <Route path='*'
-                               render={() => <div>❌404 Page Not Found❌</div>}/>
+                        {/*<Route path='*'*/}
+                        {/*       render={() => <div>❌404 Page Not Found❌</div>}/>*/}
 
                     </Switch>
                 </div>

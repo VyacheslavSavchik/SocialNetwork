@@ -59,7 +59,7 @@ const usersReducer = (state: initialStateType = initialState, action: ActionsTyp
                 ...state,
                 users: state.users.map(u => {
                     if (u.id === action.userId) {
-                        return {...u, followed: false}
+                        return {...u, followed: true}
                     }
                     return u
                 })
@@ -69,7 +69,7 @@ const usersReducer = (state: initialStateType = initialState, action: ActionsTyp
                 ...state,
                 users: state.users.map(u => {
                     if (u.id === action.userId) {
-                        return {...u, followed: true}
+                        return {...u, followed: false}
                     }
                     return u
                 })
@@ -151,7 +151,8 @@ export const follow = (userId: string) => async (dispatch: Dispatch) => {
     const apiMethod = usersAPI.followUsers(userId)
     dispatch(toggleFollowingProgress(true, userId))
     const res = await apiMethod
-    if (res.data.resultCode === 1) {
+    console.log({res})
+    if (res.data.resultCode === 0) {
         dispatch(followSuccess(userId))
     }
     dispatch(toggleFollowingProgress(false, userId))
@@ -160,7 +161,7 @@ export const follow = (userId: string) => async (dispatch: Dispatch) => {
 export const unFollow = (userId: string) => async (dispatch: Dispatch) => {
     dispatch(toggleFollowingProgress(true, userId))
     const res = await usersAPI.unFollowUsers(userId)
-    if (res.data.resultCode === 1) {
+    if (res.data.resultCode === 0) {
         dispatch(unfollowSuccess(userId))
     }
     dispatch(toggleFollowingProgress(false, userId))
